@@ -39,6 +39,7 @@ import Promise from 'bluebird'
 
   //POST to API to get mongoDB user info
   const saveUser = function(idToken) {
+    console.log(idToken);
     return new Promise((resolve, reject) => {
       $.ajax({
         url: '/signin',

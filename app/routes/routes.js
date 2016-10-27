@@ -55,8 +55,10 @@ module.exports = function(app) {
 		//Auth0 user ID
 		var id = req.body.id;
 		//POST path to retrieve user info from Auth0
+		console.log(process.env.AUTH0_DOMAIN);
 		var url = 'https://' + process.env.AUTH0_DOMAIN + '/tokeninfo';
 		request.post(url, { json: {id_token: id} } , (err, response) => {
+			console.log(response.body);
 			if (err) console.log(err)
 			//Look for user in mongoDB
 			User.findOne({
