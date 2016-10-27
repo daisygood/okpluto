@@ -3,11 +3,11 @@
 var User = require('../models/users');
 var Event = require('../models/events');
 var request = require('request');
-var authPath = process.env.AUTH0_DOMAIN || require('../../config/auth0');
-var api = process.env.GOOGLE_API || require('../../config/api.js');
+var authPath = process.env.AUTH0_DOMAIN;
+var api = process.env.GOOGLE_API;
 var Promise = require('bluebird');
 const googleMaps = require('@google/maps').createClient({
-	key: api.API_KEY
+	key: api
 });
 
 module.exports = function(app) {
@@ -55,7 +55,7 @@ module.exports = function(app) {
 		//Auth0 user ID
 		var id = req.body.id;
 		//POST path to retrieve user info from Auth0
-		var url = 'https://' + process.env.AUTH0_DOMAIN || authPath.auth0.AUTH0_DOMAIN + '/tokeninfo';
+		var url = 'https://' + process.env.AUTH0_DOMAIN + '/tokeninfo';
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 			//Look for user in mongoDB
