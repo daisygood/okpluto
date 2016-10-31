@@ -32,7 +32,7 @@ getInfo().then(authPath => {
       replace ({ pathname: '/'})
     }
   }
-}
+})
 
 // Allows onTouchTap to work in material ui components
 injectTapEventPlugin();
@@ -57,5 +57,5 @@ ReactDOM.render(
     </Route>
   </Router>, $('#app')[0]
 );
-})
+
 
