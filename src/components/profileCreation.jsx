@@ -1,5 +1,10 @@
  "use strict";
 
+// This shows the first time a user signs in
+// It steps through the sign up process
+// to get user's profile info
+
+
 import React from 'react';
 import {
   Step,
@@ -21,7 +26,9 @@ const isValidImage = function(url) {
   return url.match(rValidImage)
 };
 
-
+// Validation function for each step of signup process
+// Values param is the form name currently being validated
+// Step 0 is user profile, step 1 is dog profile
 const validate = (values, step) => {
   const errors = {};
   var requiredFields = [];
@@ -55,6 +62,7 @@ const validate = (values, step) => {
 
 class ProfileCreation extends React.Component {
 
+// Keeps all user info in state
   constructor(props) {
     super(props)
     this.state = {
@@ -73,10 +81,13 @@ class ProfileCreation extends React.Component {
     this.handlePrev = this.handlePrev.bind(this);
   }
 
-
+// Waits until new user info is saved to DataBase, then pulls
+// available info to pre-populate sign up form
+// Currently only first and last name are available
+// On every sign up
   componentDidMount() {
-    var self = this;
     setTimeout(() => {
+      // User services function, searches by user ID
       findUser()
       .then((user) => {
         this.setState({"firstname": user.firstname});
@@ -90,13 +101,15 @@ class ProfileCreation extends React.Component {
     }, 1000)
   }
 
-
+// Updates State to match user input
   handleChange(prop, event) {
     let change = {};
     change[prop] = event.target.value
     this.setState(change);
   }
 
+// Does error checking on form iput, and either displays error message,
+// or updates user in DB and redirects to users page after step 1 is complete
   handleSubmit() {
     var errors = {};
     if (this.state.stepIndex === 1) {
@@ -118,6 +131,7 @@ class ProfileCreation extends React.Component {
     console.log(this.state);
   }
 
+// Steps to next part of sign up form
   handleNext() {
     var self = this;
     this.setState({
@@ -126,6 +140,7 @@ class ProfileCreation extends React.Component {
     });
   }
 
+// Goes backwards on sign up form
   handlePrev(){
     var self = this;
     if (this.state.stepIndex > 0) {
@@ -133,6 +148,7 @@ class ProfileCreation extends React.Component {
     }
   }
 
+// Material ui - info for step form with 2 steps (user info and dog info)
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
@@ -206,6 +222,8 @@ class ProfileCreation extends React.Component {
     }
   }
 
+// Renders current step of form, or blank if form is complete
+// and user is being redirected
   render() {
     const {finished, stepIndex} = this.state;
     const contentStyle = {margin: '0 16px'};

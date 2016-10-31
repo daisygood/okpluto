@@ -1,3 +1,7 @@
+/*
+  This file contains the connection to the database! Lets you know via console.logs if your db is working. Otherwise...rut roh...
+*/
+
 'use strict';
 
 var mongoose = require('mongoose');

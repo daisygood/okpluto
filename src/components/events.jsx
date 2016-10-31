@@ -1,20 +1,24 @@
 "use strict";
 
-import UserList from './userList.jsx'
+// Parent component for rendering events page
+// Loads events from database, sorts them by distance from current user
+
+
 import { getEvents } from '../services/eventServices.js'
 import NavLoggedIn from './nav-loggedIn.jsx';
 import React, { PropTypes as T } from 'react';
-import AuthService from '../utils/AuthService.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AutoComplete from 'material-ui/AutoComplete';
-import MenuItem from 'material-ui/MenuItem';
 import MyTheme from '../theme/theme.js';
 import EventList from './eventList.jsx'
 import { getDistance } from '../services/distanceServices'
 import Banner from './banner.jsx';
-import Footer from './footer.jsx';
+import FooterLoggedIn from './footer-loggedIn.jsx';
 
+// Events load in from the database into state
+// State also keeps an array of searchable names
+// for the autocomplete search to compare to
 class Events extends React.Component {
   constructor(props) {
     super(props);
@@ -27,11 +31,17 @@ class Events extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
+// Get events and sort by distance from user
+// TODO: free calls to google distance API (2500 per day) get
+// used quickly b/c distance btwn user and every event is a separate
+// API call - need to cache this info somehow to not
+// use up API quota
   componentDidMount() {
     var self = this;
     getEvents()
     .then((events) => {
-      //Tracker to match distance to correct event
+      // Tracker to match distance returned from Google API to correct event
+      // in the database
       var eventDests = [];
       var tracker = 0;
       events.events.forEach(event => {
@@ -69,7 +79,7 @@ class Events extends React.Component {
         self.setState({events: sortedEvents})
         self.setState({displayedEvents: sortedEvents})
       // })
-      //Set Searchable options
+      //Set Searchable options for autocomplete search
       var searchArray = [];
       events.events.forEach(event => {
         searchArray.push(event.eventname, event.loc)
@@ -78,6 +88,9 @@ class Events extends React.Component {
     })
   }
 
+// Live update events displayed on page based on user search input
+// TODO: need a debounce function so this doesn't fire contantly
+// as user types
   handleChange(text, userNames) {
     var displayedEvents = this.state.events.filter(event => {
       if(event.eventname && event.loc) {
@@ -97,7 +110,7 @@ class Events extends React.Component {
     return (
       <div>
         <NavLoggedIn auth={this.props.auth} toggleDrawer={this.props.toggleDrawer} />
-        <Banner display={'Local Users'}/>
+        <Banner display={'Local Events'}/>
         <div className="row">
           <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
                <AutoComplete style={{marginLeft: '75%'}}
@@ -114,7 +127,7 @@ class Events extends React.Component {
         <div className="row" style={{marginBottom: 20}}>
             <EventList events={this.state.displayedEvents} userInfo={this.props.userInfo}/>
         </div>
-        <Footer/>
+        <FooterLoggedIn />
       </div>
     )
   }

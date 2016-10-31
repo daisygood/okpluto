@@ -1,5 +1,9 @@
 "use strict";
 
+// Divides events into rows of 4 for the
+// events page and rows of 3 for the profile
+// page, and passes event info to EventDisplay
+
 var React = require('react');
 var EventDisplay = require('./eventDisplay.jsx')
 import Loading from './loading.jsx'

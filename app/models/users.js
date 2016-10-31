@@ -1,14 +1,14 @@
+/*
+  This file contains the Users schema! Pretty self-explanatory.
+*/
+
 "use strict";
 
 var mongoose = require('mongoose');
 
 var userSchema = mongoose.Schema({
-  username: { type: String, index: {
-    unique: true
-  }},
-  id: {type: String, required: true, index: {
-    unique: true
-  }},
+  username: { type: String, index: { unique: true }},
+  id: {type: String, required: true, index: { unique: true }},
   firstname: String,
   lastname: String,
   profilepic: String,

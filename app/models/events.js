@@ -1,5 +1,7 @@
 "use strict";
 
+// Database schema for meetups
+
 var mongoose = require('mongoose');
 
 var eventSchema = mongoose.Schema({

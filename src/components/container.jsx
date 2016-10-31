@@ -1,5 +1,7 @@
 import React, { PropTypes as T } from 'react'
 
+// passes authorization object to all child routes
+
 export class Container extends React.Component {
 
   render() {

@@ -1,10 +1,11 @@
 'use strict';
 
+//Parent component for profile page - pulls event info from database, and controls render for profile info and user's events display
+
 import { searchEvents } from '../services/eventServices.js'
 import NavLoggedIn from './nav-loggedIn.jsx';
 import React, { PropTypes as T } from 'react';
 import AuthService from '../utils/AuthService.jsx';
-import Auth0Lock from '../../node_modules/auth0-lock';
 import ProfileDisplay from './profileDisplay.jsx';
 import EventList from './eventList.jsx'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -12,11 +13,13 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MyTheme from '../theme/theme.js';
 import {Tabs, Tab} from 'material-ui/Tabs'
 import Banner from './banner.jsx';
-import Footer from './footer.jsx';
+import FooterLoggedIn from './footer-loggedIn.jsx';
 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
+    //Events load into state after they are pulled from the database. If there are no events in a particular category, "No events to show" will render to the screen
+    //state.value controls which tab is active and visible
     this.state = {
       upcomingEvents: [],
       noUpcomingEvents: false,
@@ -28,8 +31,13 @@ class Profile extends React.Component {
     }
   }
 
+// Load events and divide into Upcoming,
+// Created by this user, and Past categories
   componentDidMount() {
     var self = this;
+    // Event Services helper function
+    // Searches for events containing current users DataBase ID
+    // Returns both attending events, and events created by this user
     searchEvents()
     .then(events => {
       if(!events.attendingEvents.length) {
@@ -40,6 +48,8 @@ class Profile extends React.Component {
       } else {
         let upcoming = [];
         let past = [];
+        // Test if event is future or past
+        // Divide into categories
         events.attendingEvents.forEach(event => {
         let date = new Date(event.date.slice(0, 11) + event.time.slice(0, 8))
         if (date > new Date()) {
@@ -70,6 +80,7 @@ class Profile extends React.Component {
     })
   }
 
+  // Changes active / visible tab
   handleChange(value) {
     this.setState({
       value: value
@@ -111,12 +122,14 @@ class Profile extends React.Component {
             </MuiThemeProvider>
           </div>
         </div>
-        <Footer/>
+        <FooterLoggedIn />
       </div>
     )
   }
 }
 
+// Make sure auth0 Service is passed in
+// correctly as a prop
 Profile.propTypes = {
   location: T.object,
   auth: T.instanceOf(AuthService)

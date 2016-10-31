@@ -5,6 +5,7 @@ var React = require('react');
 var UserDisplay = require('./user.jsx')
 import Loading from './loading.jsx'
 
+// Row component for each rows
 const Row = (props) => (
   <div className="row">
     {
@@ -18,6 +19,7 @@ const Row = (props) => (
 )
 
 class UserList extends React.Component {
+
   constructor(props) {
     super(props);
   }
@@ -28,6 +30,7 @@ class UserList extends React.Component {
       var users = this.props.users
       var rows = [];
       var row = [];
+      // Wrap 4 users in one row
       for (var i = 0; i < users.length; i++) {
         if (i % 4 === 0 && row.length > 0) {
           rows.push(row);
@@ -38,6 +41,7 @@ class UserList extends React.Component {
           rows.push(row);
         }
       }
+
       return (
         <div className = "container userList">
           {

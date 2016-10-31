@@ -1,26 +1,25 @@
 "use strict";
 
+// Displays user info on right side of
+// profile page
 
 import React from 'react'
-import { hashHistory } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MyTheme from '../theme/theme.js';
 import Paper from 'material-ui/Paper'
 import ProfileEditDialog from './profileEditDialog.jsx'
 
+// User info is loaded by profile.jsx
+// passed to profileDisplay as props
 class ProfileDisplay extends React.Component {
   constructor(props) {
     super(props);
   }
-
+// Renders profile info, along with button to edit
+// profile, handled by ProfileEditDialog
   render() {
-    const style = {
-      height: '220px',
-      width: '1220px',
-      textAlign: 'center',
-      display: 'inline-block',
-    };
+
     return (
       <div>
         <div className="profile-image">

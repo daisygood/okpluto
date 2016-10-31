@@ -1,13 +1,13 @@
 "use strict";
 
+// Renders profile editing form, updates state on
+// profileEditDialog component from user input on form
+
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import MyTheme from '../theme/theme.js';
-import { findUser, updateUser } from '../services/userServices.js';
-import RaisedButton from 'material-ui/RaisedButton';
-import { hashHistory } from 'react-router';
 
 class ProfileEdit extends React.Component {
 
@@ -15,6 +15,7 @@ class ProfileEdit extends React.Component {
     super(props);
   }
 
+// Grabs value from form, updates state of profileEditDialog
   handleChange(prop, event) {
     this.props.profile[prop] = event.target.value;
     this.props.change(this.props.profile);
@@ -47,6 +48,14 @@ class ProfileEdit extends React.Component {
             onChange = {this.handleChange.bind(this, 'loc')}
             name = "loc"
             errorText = {this.props.error.loc}
+          /><br />
+          <TextField
+            hintText="Your Profile Pic"
+            floatingLabelText="Your Profile Pic"
+            value = {this.props.profile.profilepic}
+            onChange = {this.handleChange.bind(this, 'profilepic')}
+            name = "profilepic"
+            errorText = {this.props.error.picLink}
           /><br />
           <TextField
             hintText="Dog Name"

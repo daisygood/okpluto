@@ -1,17 +1,25 @@
+/*
+  This file contains the MeetupCreation component! After clicking on the "Let's meetup!" button, all the form fields that appear can be interacted with here.
+*/
+
 "use strict";
 
 import React from 'react';
+import $ from 'jquery'
+//Required for Material-UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MyTheme from '../theme/theme.js';
+//Material-UI components used within this form
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
+//Function to be needed
 import { findUser } from '../services/userServices.js'
-import $ from 'jquery'
 
+//Array that contains all the category values
 const items = [
   <MenuItem key={1} value={'Dog Park'} primaryText="Dog Park" />,
   <MenuItem key={2} value={'Beach'} primaryText="Beach" />,
@@ -23,6 +31,7 @@ const items = [
 class MeetupCreation extends React.Component {
   constructor(props) {
     super(props);
+    //For DatePicker component, disables users from picking a date before the value of minDate (today)
     const minDate = new Date();
     this.state = {
       category: 'Dog Park',
@@ -31,10 +40,11 @@ class MeetupCreation extends React.Component {
       minDate: minDate
     };
     this.handleChange = this.handleChange.bind(this);
-    this.updateLocSearchBox = this.updateLocSearchBox.bind(this)
+    this.updateLocSearchBox = this.updateLocSearchBox.bind(this);
   }
 
   handleChange(prop, event, time, value) {
+    //Handles change within a few form fields differently
     var newValue;
     if (prop === 'date') {
       newValue = time.toDateString();
@@ -50,13 +60,14 @@ class MeetupCreation extends React.Component {
   }
 
   updateLocSearchBox(loc) {
-    document.getElementById('pac-input').value = loc
-    this.props.change('loc', loc)
+    document.getElementById('pac-input').value = loc;
+    this.props.change('loc', loc);
   }
 
   componentDidMount() {
     findUser(this.props.targetUser)
     .then((user) => {
+      //For eventname field hintText
       this.setState({'friendName': user.firstname});
       this.setState({'friendDogName': user.dogname});
     })
@@ -73,25 +84,24 @@ class MeetupCreation extends React.Component {
       disableDefaultUI: true,
       zoomControl: true
     }
-
+    //Creates map
     let map = new google.maps.Map(document.getElementById('map'), options);
 
-    // Create the search box and link it to the UI element.
+    //Creates the search box and links it to the UI element
     var input = document.getElementById('pac-input');
     var searchBox = new google.maps.places.SearchBox(input);
 
-    //remove default placeholder for search box
+    //Removes default placeholder for search box
     $('input#pac-input').attr('placeholder', '')
-    //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-    // Bias the SearchBox results towards current map's viewport.
+    //Bias the SearchBox results towards current map's viewport
     google.maps.event.addListener(map, 'bounds_changed', function() {
       searchBox.setBounds(map.getBounds());
     });
 
     var markers = [];
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
+
+    //Listen for the event fired when the user selects a prediction and retrieve more details for that place
     searchBox.addListener('places_changed', function() {
       var places = searchBox.getPlaces();
       if (places.length === 1) {
@@ -99,20 +109,20 @@ class MeetupCreation extends React.Component {
         self.setState({lat: place.lat(), lng: place.lng()})
         self.props.change('lat', place.lat())
         self.props.change('lng', place.lng())
-        console.log(places[0].name)
         self.props.change('loc', places[0].name)
       }
       if (places.length === 0) {
         return;
       }
 
-      // Clear out the old markers.
+      //Clears out the old markers
       markers.forEach(function(marker) {
         marker.setMap(null);
       });
+
       markers = [];
 
-      // For each place, get the icon, name and location.
+      //For each place, get the icon, name and location
       var bounds = new google.maps.LatLngBounds();
       places.forEach(function(place) {
         if (!place.geometry) {
@@ -127,30 +137,32 @@ class MeetupCreation extends React.Component {
           scaledSize: new google.maps.Size(25, 25)
         };
 
-        // Create a marker for each place.
+        //Create a marker for each place
         var marker = new google.maps.Marker({
           map: map,
           icon: icon,
           title: place.name,
           position: place.geometry.location
         });
+
         markers.push(marker);
 
         //Listen for clicks on markers
         marker.addListener('click', () => {
-        self.setState({lat: marker.position.lat(), lng: marker.position.lng()})
-        self.props.change('lat', marker.position.lat())
-        self.props.change('lng', marker.position.lng())
-        self.updateLocSearchBox(marker.title)
-        })
+          self.setState({lat: marker.position.lat(), lng: marker.position.lng()});
+          self.props.change('lat', marker.position.lat());
+          self.props.change('lng', marker.position.lng());
+          self.updateLocSearchBox(marker.title);
+        });
 
         if (place.geometry.viewport) {
-          // Only geocodes have viewport.
+          //Only geocodes have viewport
           bounds.union(place.geometry.viewport);
         } else {
           bounds.extend(place.geometry.location);
         }
       });
+
       map.fitBounds(bounds);
     });
   }
@@ -161,6 +173,7 @@ class MeetupCreation extends React.Component {
       width: '400px'
     }
 
+    //Note: All text fields have a name and an errorText that is needed for validation (validate function can be found within parent component, MeetupDialog)
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
         <div>
@@ -176,7 +189,7 @@ class MeetupCreation extends React.Component {
               floatingLabelText="Category"
               value={this.state.category}
               name="category"
-              errorText={this.state.category===null && 'Required'}
+              errorText={this.state.category === null && 'Required'}
               onChange={this.handleChange.bind(this, 'category')}
               style={{width: 400, 'textAlign': 'left'}}
             >

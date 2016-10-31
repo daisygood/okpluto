@@ -3,6 +3,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+// Opens up mongod on local machine
     shell: {
       mongo: {
         command: 'mongod',
@@ -12,6 +13,8 @@ module.exports = function(grunt) {
       }
     },
 
+// Allows nodemon and browserify watch to run simultaneously
+// in the same terminal tab/window
     concurrent: {
       target: {
         tasks: ['nodemon', 'watch'],
@@ -21,6 +24,8 @@ module.exports = function(grunt) {
       }
     },
 
+// Watches all files in src for changes
+// rebuilds bundle.js file on change
     watch: {
       browserify: {
         files: ['src/**/*.jsx'],
@@ -28,6 +33,8 @@ module.exports = function(grunt) {
       }
     },
 
+// Allows for es6, jsx through babel,
+// concats everything into bundle.js
     browserify: {
       dist: {
         options: {
@@ -47,6 +54,7 @@ module.exports = function(grunt) {
       }
     },
 
+// Opens a new browser window each time nodemon starts up
     nodemon: {
       dev: {
         script: 'server.js',
@@ -76,6 +84,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-shell-spawn');
 
+// Running grunt will open mongo connection, create bundle.js,
+// open a browser window with the site and watch for changes
   grunt.registerTask('default', ['shell:mongo', 'build', 'concurrent:target']);
   grunt.registerTask('kill', ['shell:mongo:kill'])
   grunt.registerTask('build', ['browserify']);

@@ -1,8 +1,10 @@
 "use strict";
 
+//Controls React Routes, sets up auth0 service
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import AuthService from './utils/AuthService.jsx';
 import { getInfo } from './utils/communication.js';
 import $ from 'jquery';
@@ -14,25 +16,33 @@ import Profile from './components/profile.jsx'
 import Events from './components/events.jsx'
 import ProfileCreation from './components/profileCreation.jsx'
 import Loading from './components/loading.jsx'
-import MeetupCreation from './components/meetupCreation.jsx'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-//import api from '../config/api.js'
 import GoogleMapsLoader from 'google-maps'
 import InfoDrawer from './components/infoDrawer.jsx'
 
 
 getInfo().then(authPath => {
-  const auth = new AuthService(authPath.auth.clientId, authPath.auth.domain);
 
+  // Setting up auth service
+  const auth = new AuthService(auth0.AUTH0_CLIENT_ID, auth0.AUTH0_DOMAIN);
+
+  // check for authenication in all protected routes
   const requireAuth = (nextState, replace) => {
     if (!auth.loggedIn()) {
       replace ({ pathname: '/'})
     }
+  }
 }
 
-//const passProps = ()
+// Allows onTouchTap to work in material ui components
 injectTapEventPlugin();
 
+// Container is a parent route that passes authenication service to all
+// of its children
+// Info drawer is a parent route that loads in the current users info,
+// and passes it as props to all direct child routes
+// "access_token" route is so auth0 login has a route that matches it
+// otherwise login will fail
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={Container} auth={auth}>

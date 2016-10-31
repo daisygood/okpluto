@@ -2,27 +2,9 @@
 
 import Promise from 'bluebird'
 
+// ajax call to get distance btwn two locations
 const getDistance = function(origin, destination) {
-  // var originObj = {
-  //   originLat: origin.lat,
-  //   originLng: origin.lng
-  // }
 
-  // var destObj = {
-  //   destinationLat: destination.lat,
-  //   destinationLng: destination.lng
-  // }
-
-  // const serialize = function(obj) {
-  //   var str = [];
-  //   for(var p in obj)
-  //     if (obj.hasOwnProperty(p)) {
-  //       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-  //     }
-  //   return str.join("&");
-  // }
-  // const url = `api/distance?${serialize(originObj)}&${serialize(destObj)}`
-  // console.log(url)
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/distance',
