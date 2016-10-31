@@ -22,10 +22,8 @@ import InfoDrawer from './components/infoDrawer.jsx'
 
 
 getInfo().then(authPath => {
-  console.log(authPath);
   // Setting up auth service
   const auth = new AuthService(authPath.auth.clientId, authPath.auth.domain);
-  console.log(auth);
   // check for authenication in all protected routes
   const requireAuth = (nextState, replace) => {
     if (!auth.loggedIn()) {
