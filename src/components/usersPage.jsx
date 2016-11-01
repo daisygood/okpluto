@@ -55,30 +55,30 @@ class UsersPage extends React.Component {
       });
 
       //Find distance btwn current user and each other user
-      // getDistance({lat: this.props.userInfo.lat, lng: this.props.userInfo.lng}, userDests)
-      // .then(distances => {
-      //   console.log(distances)
-      //   users.users.forEach(user => {
-      //     if (user.tracker !== undefined && distances[user.tracker].status === "OK") {
-      //       user.distance = Number(distances[user.tracker].distance.value)
-      //     }
-      //   })
-      //   //Sort by distance
-      //   var noDistInfo = [];
-      //   var usersDistInfo = []
-      //   users.users.forEach(user => {
-      //     if (user.distance === undefined) {
-      //       noDistInfo.push(user)
-      //     } else {
-      //       usersDistInfo.push(user)
-      //     }
-      //   });
-      //   usersDistInfo.sort((a, b) => {
-      //     return a.distance < b.distance ? -1 : 1
-      //   })
-      //   let sortedUsers = usersDistInfo.concat(noDistInfo)
+      getDistance({lat: this.props.userInfo.lat, lng: this.props.userInfo.lng}, userDests)
+      .then(distances => {
+        console.log(distances)
+        users.users.forEach(user => {
+          if (user.tracker !== undefined && distances[user.tracker].status === "OK") {
+            user.distance = Number(distances[user.tracker].distance.value)
+          }
+        })
+        //Sort by distance
+        var noDistInfo = [];
+        var usersDistInfo = []
+        users.users.forEach(user => {
+          if (user.distance === undefined) {
+            noDistInfo.push(user)
+          } else {
+            usersDistInfo.push(user)
+          }
+        });
+        usersDistInfo.sort((a, b) => {
+          return a.distance < b.distance ? -1 : 1
+        })
+        let sortedUsers = usersDistInfo.concat(noDistInfo)
 
-      let sortedUsers = users.users
+      //let sortedUsers = users.users
         //Set users to display after getting distance info
         self.setState({users: sortedUsers})
         self.setState({displayedUsers: sortedUsers})

@@ -52,29 +52,29 @@ class Events extends React.Component {
         }
       })
       //Find distance between user and each event
-      // getDistance({lat: this.props.userInfo.lat, lng: this.props.userInfo.lng}, eventDests)
-      // .then(distances => {
-      //   console.log(distances)
-      //   events.events.forEach(event => {
-      //     if (event.tracker !== undefined && distances[event.tracker].status === "OK") {
-      //       event.distance = Number(distances[event.tracker].distance.value)
-      //     }
-      //   })
-      //   // Sort by distance
-      //   var noDistInfo = [];
-      //   var eventsDistInfo = []
-      //   events.events.forEach(event => {
-      //     if (event.distance === undefined) {
-      //       noDistInfo.push(event)
-      //     } else {
-      //       eventsDistInfo.push(event)
-      //     }
-      //   });
-      //   eventsDistInfo.sort((a, b) => {
-      //     return a.distance < b.distance ? -1 : 1
-      //   })
-      //   let sortedEvents = eventsDistInfo.concat(noDistInfo)
-      let sortedEvents = events.events
+      getDistance({lat: this.props.userInfo.lat, lng: this.props.userInfo.lng}, eventDests)
+      .then(distances => {
+        console.log(distances)
+        events.events.forEach(event => {
+          if (event.tracker !== undefined && distances[event.tracker].status === "OK") {
+            event.distance = Number(distances[event.tracker].distance.value)
+          }
+        })
+        // Sort by distance
+        var noDistInfo = [];
+        var eventsDistInfo = []
+        events.events.forEach(event => {
+          if (event.distance === undefined) {
+            noDistInfo.push(event)
+          } else {
+            eventsDistInfo.push(event)
+          }
+        });
+        eventsDistInfo.sort((a, b) => {
+          return a.distance < b.distance ? -1 : 1
+        })
+        let sortedEvents = eventsDistInfo.concat(noDistInfo)
+      //let sortedEvents = events.events
         //Set events into state after getting distance
         self.setState({events: sortedEvents})
         self.setState({displayedEvents: sortedEvents})
