@@ -82,7 +82,7 @@ class UsersPage extends React.Component {
         //Set users to display after getting distance info
         self.setState({users: sortedUsers})
         self.setState({displayedUsers: sortedUsers})
-      // })
+      })
     })
   }
 

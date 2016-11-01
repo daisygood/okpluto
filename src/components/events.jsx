@@ -78,7 +78,7 @@ class Events extends React.Component {
         //Set events into state after getting distance
         self.setState({events: sortedEvents})
         self.setState({displayedEvents: sortedEvents})
-      // })
+      })
       //Set Searchable options for autocomplete search
       var searchArray = [];
       events.events.forEach(event => {
